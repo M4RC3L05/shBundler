@@ -4,10 +4,10 @@ pathsVisited=()
 
 inArr() {
     local query=$1
-    local arr="${@:2}"
+    local arr=${@:2}
 
     for item in ${arr[@]}; do
-        if [[ "$query" == $item ]]; then
+        if [[ "$query" = "$item" ]]; then
             printf "sim"
             return;
         fi
@@ -22,13 +22,13 @@ copyToFile() {
     local inFile=$1
     local outFile=$2
 
-    local importAbs="(source|\#import|\.)[[:space:]]+(\/.+)"
-    local importRel="(source|\#import|\.)[[:space:]]+(\.\/.+)"
-    local importHome="(source|\#import|\.)[[:space:]]+(\~\/.+)"
+    local importAbs="^(source|\#[[:space:]]*import|\.)[[:space:]]+(\/.+)"
+    local importRel="^(source|\#[[:space:]]*import|\.)[[:space:]]+(\.\/.+)"
+    local importHome="^(source|\#[[:space:]]*import|\.)[[:space:]]+(\~\/.+)"
 
     local wasVisited=$(inArr $inFile "${pathsVisited[@]}")
 
-    if [[ "$wasVisited" == "sim" ]]; then
+    if [[ "$wasVisited" = "sim" ]]; then
         return;
     fi
 

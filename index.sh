@@ -3,6 +3,8 @@ source ./src/bundler.sh
 source ./src/utils/spinner.sh
 
 shBundler() {
+    
+    printf "\033c\n"
 
     if [[ -z "$1" ]]; then 
         printf "You must suply the in index.sh!\n\n shBundler <dir> <outdir> <outfile>\n"
@@ -42,7 +44,7 @@ shBundler() {
 
     spinner "bundler $indexsh $outPath" "Bundling:"
 
-    printf "Done!!!"
+    printf "Done!!!\n\n"
 }
 
 shBundler $1 $2 $3
