@@ -35,8 +35,7 @@ shBundler() {
     if  [[ ! -d $outDir ]]; then
         spinner "mkdir $outDir" "Creating out folder:"
     else 
-        spinner "rm -rf $outDir" "Removing old dir folder:"
-        spinner "mkdir $outDir" "Creating out folder:"
+        spinner "rm -rf $outDir/$outFile" "Removing old bundle file folder if exists:"
     fi
 
     local outPath="${outDir}/${outFile}"
