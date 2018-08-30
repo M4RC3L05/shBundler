@@ -6,6 +6,7 @@ shBundler() {
     
     printf "\033c\n"
 
+
     if [[ -z "$1" ]]; then 
         printf "You must suply the in index.sh!\n\n shBundler <dir> <outdir> <outfile>\n"
         return
