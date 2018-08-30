@@ -1,6 +1,3 @@
-#import ./copyToFile.sh
-#import ./copyToFile.sh
-
 bundler() {
     local indexsh=$1
     local outPath=$2
