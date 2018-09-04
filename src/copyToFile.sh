@@ -41,7 +41,7 @@ copyToFile() {
     ((i+=1))
 
     while IFS="" read -r line || [[ -n "$line" ]]; do
-        
+
         if [[ ${line} =~ ${importHome} ]]; then
             local importPath="${BASH_REMATCH[2]}"
 
@@ -52,14 +52,14 @@ copyToFile() {
             fi
 
             local pathFormated=$(realpath ${importPath/"~"/$HOME})
-            
+
             copyToFile $pathFormated $outFile
             continue
 
-            
+
         elif [[ "$line" =~ $importRel ]]; then
             local importPath="${BASH_REMATCH[2]}"
-            
+
             local file=$(basename -- $importPath)
 
             if [[ ${file##*.} != "sh" ]]; then
@@ -82,13 +82,13 @@ copyToFile() {
 
             copyToFile $importPath $outFile
             continue
-            
+
         fi
 
-        
+
         echo "$line" >> $outFile
 
     done < $inFile
-    
+
     echo -e "\n" >> $outFile
 }
