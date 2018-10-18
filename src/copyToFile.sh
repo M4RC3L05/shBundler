@@ -25,6 +25,7 @@ copyToFile() {
     local importAbs="^(source|\#[[:space:]]*import|\.)[[:space:]]+(\/.+)"
     local importRel="^(source|\#[[:space:]]*import|\.)[[:space:]]+(\.\/.+)"
     local importHome="^(source|\#[[:space:]]*import|\.)[[:space:]]+(\~\/.+)"
+    local shebang="^\#\!\/(usr\/bin\/env[[:space:]]bash|bin\/bash)"
 
     local wasVisited=$(inArr $inFile "${pathsVisited[@]}")
 
@@ -42,7 +43,10 @@ copyToFile() {
 
     while IFS="" read -r line || [[ -n "$line" ]]; do
 
-        if [[ ${line} =~ ${importHome} ]]; then
+        if [[ ${line} =~ ${shebang} ]]; then
+            continue
+
+        elif [[ ${line} =~ ${importHome} ]]; then
             local importPath="${BASH_REMATCH[2]}"
 
             local file=$(basename -- $importPath)
@@ -55,7 +59,6 @@ copyToFile() {
 
             copyToFile $pathFormated $outFile
             continue
-
 
         elif [[ "$line" =~ $importRel ]]; then
             local importPath="${BASH_REMATCH[2]}"
@@ -84,7 +87,6 @@ copyToFile() {
             continue
 
         fi
-
 
         echo "$line" >> $outFile
 
