@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+source ./src/state.sh
+source ./src/copyFunction.sh
 source ./src/copyToFile.sh
 source ./src/bundler.sh
 source ./src/utils/spinner.sh

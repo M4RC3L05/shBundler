@@ -1,0 +1,21 @@
+prompt_command() {
+
+local __exit_status=$(__wasCommandSuccessfull)
+local __isadmin=$(__adminstatus)
+local __fishlikepath=$(__displayPath)
+local __git_branch_name=$(__git__displayVCSStatus)
+
+local __tmp_ps1="\n"
+
+[[ ${#__isadmin} > 0 ]] && __tmp_ps1="${__tmp_ps1}${__isadmin} "
+[[ ${#__exit_status} > 0 ]] && __tmp_ps1="${__tmp_ps1}${__exit_status} "
+__tmp_ps1="${__tmp_ps1}${MAGENTA}\u${RESET} "
+[[ ${#__fishlikepath} > 0 ]] && __tmp_ps1="${__tmp_ps1}${__fishlikepath} "
+[[ ${#__git_branch_name} > 0 ]] && __tmp_ps1="${__tmp_ps1}${__git_branch_name} "
+
+__tmp_ps1="${__tmp_ps1}${RED}❯${RESET}${YELLOW}❯${RESET}${MAGENTA}❯${RESET} "
+
+PS1="${__tmp_ps1}"
+
+}
+

@@ -1,20 +1,4 @@
-
-pathsVisited=()
-
-
-inArr() {
-    local query=$1
-    local arr=${@:2}
-
-    for item in ${arr[@]}; do
-        if [[ "$query" = "$item" ]]; then
-            printf "sim"
-            return;
-        fi
-    done
-
-    printf "nao"
-}
+#!/usr/bin/env bash
 
 i=0
 
@@ -25,15 +9,18 @@ copyToFile() {
     local importAbs="^(source|\#[[:space:]]*import|\.)[[:space:]]+(\/.+)"
     local importRel="^(source|\#[[:space:]]*import|\.)[[:space:]]+(\.\/.+)"
     local importHome="^(source|\#[[:space:]]*import|\.)[[:space:]]+(\~\/.+)"
+    local importFuncAbs="^(source|\#[[:space:]]*import|\.)[[:space:]]+\{[[:space:]]*(.+)[[:space:]]*\}[[:space:]]+(\/.+)"
+    local importFuncRel="^(source|\#[[:space:]]*import|\.)[[:space:]]+\{[[:space:]]*(.+)[[:space:]]*\}[[:space:]]+(\.\/.+)"
+    local importFuncHome="^(source|\#[[:space:]]*import|\.)[[:space:]]+\{[[:space:]]*(.+)[[:space:]]*\}[[:space:]]+(\~\/.+)"
     local shebang="^\#\!\/(usr\/bin\/env[[:space:]]bash|bin\/bash)"
 
-    local wasVisited=$(inArr $inFile "${pathsVisited[@]}")
+    local wasVisited=$(inState "$inFile")
 
     if [[ "$wasVisited" = "sim" ]]; then
         return;
     fi
 
-    pathsVisited+=("$inFile")
+    addToState "$inFile"
 
     if [[ i -eq 0 ]]; then
         echo -en "#!/usr/bin/env bash\n\n" >> $outFile
@@ -84,6 +71,52 @@ copyToFile() {
             fi
 
             copyToFile $importPath $outFile
+            continue
+
+        elif [[ "$line" =~ $importFuncAbs ]]; then
+
+            local funcName="${BASH_REMATCH[2]}"
+            local importPath="${BASH_REMATCH[3]}"
+            local file=$(basename -- $importPath)
+
+            if [[ ${file##*.} != "sh" ]]; then
+                continue
+            fi
+
+            copyFunction $importPath $funcName $outFile
+            continue
+
+        elif [[ "$line" =~ $importFuncHome ]]; then
+
+            local funcName="${BASH_REMATCH[2]}"
+            local importPath="${BASH_REMATCH[3]}"
+            local file=$(basename -- $importPath)
+
+            if [[ ${file##*.} != "sh" ]]; then
+                continue
+            fi
+
+            local pathFormated=$(realpath ${importPath/"~"/$HOME})
+
+            copyFunction $pathFormated $funcName $outFile
+            continue
+
+
+        elif [[ "$line" =~ $importFuncRel ]]; then
+
+            local funcName="${BASH_REMATCH[2]}"
+            local importPath="${BASH_REMATCH[3]}"
+            local file=$(basename -- $importPath)
+
+            if [[ ${file##*.} != "sh" ]]; then
+                continue
+            fi
+
+            local baseDir=$(cd $(dirname $inFile) && pwd)
+            local pathFormated=$(realpath ${importPath/"."/$baseDir})
+
+
+            copyFunction $pathFormated $funcName $outFile
             continue
 
         fi
