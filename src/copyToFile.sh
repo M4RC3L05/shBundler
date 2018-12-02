@@ -9,9 +9,9 @@ copyToFile() {
     local importAbs="^(source|\#[[:space:]]*import|\.)[[:space:]]+(\/.+)"
     local importRel="^(source|\#[[:space:]]*import|\.)[[:space:]]+(\.\/.+)"
     local importHome="^(source|\#[[:space:]]*import|\.)[[:space:]]+(\~\/.+)"
-    local importFuncAbs="^(source|\#[[:space:]]*import|\.)[[:space:]]+\{[[:space:]]*(.+)[[:space:]]*\}[[:space:]]+(\/.+)"
-    local importFuncRel="^(source|\#[[:space:]]*import|\.)[[:space:]]+\{[[:space:]]*(.+)[[:space:]]*\}[[:space:]]+(\.\/.+)"
-    local importFuncHome="^(source|\#[[:space:]]*import|\.)[[:space:]]+\{[[:space:]]*(.+)[[:space:]]*\}[[:space:]]+(\~\/.+)"
+    local importFuncAbs="^(\#[[:space:]]*import)[[:space:]]+\{[[:space:]]*(.+)[[:space:]]*\}[[:space:]]+(\/.+)"
+    local importFuncRel="^(\#[[:space:]]*import)[[:space:]]+\{[[:space:]]*(.+)[[:space:]]*\}[[:space:]]+(\.\/.+)"
+    local importFuncHome="^(\#[[:space:]]*import)[[:space:]]+\{[[:space:]]*(.+)[[:space:]]*\}[[:space:]]+(\~\/.+)"
     local shebang="^\#\!\/(usr\/bin\/env[[:space:]]bash|bin\/bash)"
 
     local wasVisited=$(inState "$inFile")

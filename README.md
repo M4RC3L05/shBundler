@@ -20,8 +20,6 @@
     -   ". \<filepath>"
     -   "#import \<filepath>"
     -   (New) Named Imports
-        -   "source { \<fnName> } \<filepath>",
-        -   ". { \<fnName> } \<filepath>"
         -   "#import { \<fnName> } \<filepath>"
 
 5.  Now run de command with the name of the created entry file
