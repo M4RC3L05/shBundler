@@ -87,7 +87,7 @@ copyToFile() {
 
             for fn in "${fNamesArr[@]}"; do
                 finalFN=${fn//" "}
-                copyFunction $pathFormated $finalFN $outFile
+                copyFunction $importPath $finalFN $outFile
             done
 
             continue
