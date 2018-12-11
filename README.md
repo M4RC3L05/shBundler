@@ -20,7 +20,7 @@
     -   ". \<filepath>"
     -   "#import \<filepath>"
     -   (New) Named Imports
-        -   "#import { \<fnName>, \<...otherFnNames> } \<filepath>"
+        -   "#import { \<fnName>, \<...otherFnNames> } \<filepath>" (You will have to import the function dependencies before)
 
 5.  Now run de command with the name of the created entry file
     ```console

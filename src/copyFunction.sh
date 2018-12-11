@@ -6,14 +6,17 @@ copyFunction() {
     local outFile="$3"
     local fNameReg="^(function[[:space:]]+$fName|$fName)[[:space:]]*\(.*\)[[:space:]]*\{"
     local endFunc="^\}$"
+    local inLineFn="^(function[[:space:]]+$fName|$fName)[[:space:]]*\(.*\)[[:space:]]*\{.*\}$"
     local startCopy=false
+    local key="$fName@$filePath"
 
-    local filename=$(basename -- $filePath)
-    local key="$fName@$filename"
+    inState "$filePath"
+    local wasVisitedPath=$?
 
-    local wasVisited=$(inState "$key")
+    inState "$key"
+    local wasVisited=$?
 
-    if [[ "$wasVisited" = "sim" ]]; then
+    if [[ $wasVisited = 0 || $wasVisitedPath = 0 ]]; then
         return;
     fi
 
@@ -21,17 +24,22 @@ copyFunction() {
 
     while IFS="" read -r line || [[ -n "$line" ]]; do
 
-        if [[ "$line" =~ $fNameReg ]]; then
-            startCopy=true
+        if [[ "$line" =~ $inLineFn ]]; then
+            echo -en "$line\n\n" >> "$outFile"
+            return
         fi
 
-        if [[ $startCopy == true && "$line" =~ $endFunc ]]; then
+        if [[ "$line" =~ $fNameReg ]]; then
+            startCopy=0
+        fi
+
+        if [[ $startCopy = 0 && "$line" =~ $endFunc ]]; then
             echo -en "$line\n\n" >> "$outFile"
-            startCopy=false
+            startCopy=255
             break
         fi
 
-        if $startCopy; then
+        if [[ $startCopy = 0 ]]; then
             echo $line >> "$outFile"
         fi
     done < $filePath

@@ -1,10 +1,12 @@
 #!/usr/bin/env bash
 
 source ./src/state.sh
+source ./src/utils/spinner.sh
+source ./src/utils/strings.sh
 source ./src/copyFunction.sh
 source ./src/copyToFile.sh
 source ./src/bundler.sh
-source ./src/utils/spinner.sh
+
 
 shBundler() {
 

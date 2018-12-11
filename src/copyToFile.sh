@@ -12,12 +12,13 @@ copyToFile() {
     local importFuncAbs="^(\#[[:space:]]*import)[[:space:]]+\{[[:space:]]*(.+)[[:space:]]*\}[[:space:]]+(\/.+)"
     local importFuncRel="^(\#[[:space:]]*import)[[:space:]]+\{[[:space:]]*(.+)[[:space:]]*\}[[:space:]]+(\.\/.+)"
     local importFuncHome="^(\#[[:space:]]*import)[[:space:]]+\{[[:space:]]*(.+)[[:space:]]*\}[[:space:]]+(\~\/.+)"
+    local varReg="^([\$_a-zA-Z]+[\$_\w]*\=.+)$"
     local shebang="^\#\!\/(usr\/bin\/env[[:space:]]bash|bin\/bash)"
 
-    local wasVisited=$(inState "$inFile")
-
-    if [[ "$wasVisited" = "sim" ]]; then
-        return;
+    inState "$inFile"
+    local wasVisited=$?
+    if [[ $wasVisited = 0 ]]; then
+        return
     fi
 
     addToState "$inFile"
@@ -84,9 +85,8 @@ copyToFile() {
             fi
 
             IFS=',' read -ra fNamesArr <<< "$funcName"
-
             for fn in "${fNamesArr[@]}"; do
-                finalFN=${fn//" "}
+                local finalFN=$(trim "$fn")
                 copyFunction $importPath $finalFN $outFile
             done
 
@@ -105,9 +105,8 @@ copyToFile() {
             local pathFormated=$(realpath ${importPath/"~"/$HOME})
 
             IFS=',' read -ra fNamesArr <<< "$funcName"
-
             for fn in "${fNamesArr[@]}"; do
-                finalFN=${fn//" "}
+                local finalFN=$(trim "$fn")
                 copyFunction $pathFormated $finalFN $outFile
             done
 
@@ -115,7 +114,6 @@ copyToFile() {
 
 
         elif [[ "$line" =~ $importFuncRel ]]; then
-
             local funcName="${BASH_REMATCH[2]}"
             local importPath="${BASH_REMATCH[3]}"
             local file=$(basename -- $importPath)
@@ -128,9 +126,10 @@ copyToFile() {
             local pathFormated=$(realpath ${importPath/"."/$baseDir})
 
 
+
             IFS=',' read -ra fNamesArr <<< "$funcName"
             for fn in "${fNamesArr[@]}"; do
-                finalFN=${fn//" "}
+                local finalFN=$(trim "$fn")
                 copyFunction $pathFormated $finalFN $outFile
             done
 

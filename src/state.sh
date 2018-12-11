@@ -2,20 +2,16 @@
 
 state=()
 
-
-
-
 inState() {
     local query=$1
 
     for item in ${state[@]}; do
-        if [[ "$query" = "$item" ]]; then
-            printf "sim"
-            return;
+        if [[ "$query" == "$item" ]]; then
+            return 0
         fi
     done
 
-    printf "nao"
+    return 255
 }
 
 printState() {
