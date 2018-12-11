@@ -83,7 +83,13 @@ copyToFile() {
                 continue
             fi
 
-            copyFunction $importPath $funcName $outFile
+            IFS=',' read -ra fNamesArr <<< "$funcName"
+
+            for fn in "${fNamesArr[@]}"; do
+                finalFN=${fn//" "}
+                copyFunction $pathFormated $finalFN $outFile
+            done
+
             continue
 
         elif [[ "$line" =~ $importFuncHome ]]; then
@@ -98,7 +104,13 @@ copyToFile() {
 
             local pathFormated=$(realpath ${importPath/"~"/$HOME})
 
-            copyFunction $pathFormated $funcName $outFile
+            IFS=',' read -ra fNamesArr <<< "$funcName"
+
+            for fn in "${fNamesArr[@]}"; do
+                finalFN=${fn//" "}
+                copyFunction $pathFormated $finalFN $outFile
+            done
+
             continue
 
 
@@ -116,7 +128,12 @@ copyToFile() {
             local pathFormated=$(realpath ${importPath/"."/$baseDir})
 
 
-            copyFunction $pathFormated $funcName $outFile
+            IFS=',' read -ra fNamesArr <<< "$funcName"
+            for fn in "${fNamesArr[@]}"; do
+                finalFN=${fn//" "}
+                copyFunction $pathFormated $finalFN $outFile
+            done
+
             continue
 
         fi
