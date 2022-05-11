@@ -6,9 +6,11 @@
 
 2.  Compile: ./index.sh \<entry file path> \<output dir> \<output filename (optional)>
 
-    ```console
-    host@name:~$ ./index.sh ./dist shBundler.sh
+    ```bash
+    host@name:~$ ./index.sh ./index.sh ./dist shBundler.sh
     ```
+
+    or execute `build.sh`
 
 3.  expose the compiled file to you path
 
@@ -23,6 +25,6 @@
         -   "#import { \<fnName>, \<...otherFnNames> } \<filepath>" (You will have to import the function dependencies before)
 
 5.  Now run de command with the name of the created entry file
-    ```console
+    ```bash
     host@name:~$ shBundler.sh <entry file path> <output dir> <output filename>
     ```
