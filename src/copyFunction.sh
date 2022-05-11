@@ -25,7 +25,7 @@ copyFunction() {
     while IFS="" read -r line || [[ -n "$line" ]]; do
 
         if [[ "$line" =~ $inLineFn ]]; then
-            echo -en "$line\n\n" >> "$outFile"
+            echo -en "$line\n" >> "$outFile"
             return
         fi
 
@@ -34,16 +34,14 @@ copyFunction() {
         fi
 
         if [[ $startCopy = 0 && "$line" =~ $endFunc ]]; then
-            echo -en "$line\n\n" >> "$outFile"
+            echo -en "$line\n" >> "$outFile"
             startCopy=255
             break
         fi
 
         if [[ $startCopy = 0 ]]; then
-            echo $line >> "$outFile"
+            echo -e "$line" >> "$outFile"
         fi
     done < $filePath
 
 }
-
-copyFunction $1 $2 $3
