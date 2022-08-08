@@ -1,5 +1,7 @@
 # Simple bundler for shell scripts
 
+> This is an attempt, use at your own risk.
+
 ## Usage
 
 1.  Clone repo
